@@ -6,7 +6,7 @@ export const dateKey = (d = new Date()) => { const x = new Date(d); return `${x.
 export const monthKey = (d = new Date()) => dateKey(d).slice(0, 7);
 export const weekKey = (d = new Date()) => { const x = new Date(d); const day = x.getDay() || 7; x.setDate(x.getDate() - day + 1); return dateKey(x); };
 export const base = (): BaseRecord => ({ id: uid(), createdAt: now(), updatedAt: now() });
-export const blankData = (): AppData => ({ monthlyGoals: [], monthlyReviews: [], weeklyTasks: [], recurringTasks: [], temporaryTasks: [], completionRecords: [], timeEntries: [], categories: [{ ...base(), name: '生活', color: '#d78b62' }, { ...base(), name: '学习', color: '#4d8b8d' }, { ...base(), name: '工作', color: '#d3a84f' }], dailyLifeLogs: [], settings: { theme: 'system', weekStartsOn: 1 } });
-export const loadData = (): AppData => { try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? { ...blankData(), ...JSON.parse(raw) } : blankData(); } catch { return blankData(); } };
+export const blankData = (): AppData => ({ monthlyGoals: [], monthlyReviews: [], weeklyTasks: [], recurringTasks: [], temporaryTasks: [], completionRecords: [], standaloneTimeEntries: [], timeEntries: [], categories: [{ ...base(), name: '生活', color: '#d78b62' }, { ...base(), name: '学习', color: '#4d8b8d' }, { ...base(), name: '工作', color: '#d3a84f' }], dailyLifeLogs: [], settings: { theme: 'system', weekStartsOn: 1 } });
+export const loadData = (): AppData => { try { const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return blankData(); const parsed = JSON.parse(raw); return { ...blankData(), ...parsed, standaloneTimeEntries: parsed.standaloneTimeEntries || [] }; } catch { return blankData(); } };
 export const saveData = (data: AppData) => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 export const formatMinutes = (m: number) => m < 60 ? `${Math.round(m)} 分钟` : `${Math.floor(m/60)} 小时 ${Math.round(m%60)} 分钟`;
