@@ -3,3 +3,6 @@ dist
 .DS_Store
 .pnpm-store
 preview
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
